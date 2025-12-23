@@ -3,7 +3,8 @@
 
 import gfx_stack as gfx
 import kommandozeilen_argumente as cmdargs
-
+from map import Map
+from pathlib import Path
 
 def paint_smiley():
     """einfache Demonstration zum Zeichnen von Pixeln.
@@ -41,19 +42,22 @@ def main():
     # Grafik-Fenster öffnen
     # erzeuge eine 80 x 60 Pixel Zeichenfläche
     # Passen Sie die Größe der Zeichenfläche, an die Größe des Labyrinths an!
-    gfx.init_once((80, 64))
+    # gfx.init_once((80, 64))
 
+    map = Map(Path("/home/valerie/projects/uni/SWENG1/Labyrinth/maps/Labyrinth-2.txt"))
 
     # zeichnen, aktualisieren und auf Nutzereingaben warten
     while not gfx.stop_prog:
         # zeichnen des Testbildes
-        gfx.color_demo_paint_on_surface()
+        # gfx.color_demo_paint_on_surface()
+
+        map.draw_map(window_size=(1920, 1080))
 
         # Beispiel reagieren auf Space key
         if gfx.space_key == True:
             print("Leertaste registriert")
             # Smiley zeichnen
-            paint_smiley()
+            # paint_smiley()
 
         gfx.event_loop()
 

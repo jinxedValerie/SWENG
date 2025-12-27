@@ -30,7 +30,7 @@ def main():
         # zeichnen des Testbildes
         # gfx.color_demo_paint_on_surface()
 
-        draw_map(map)
+        draw_map(map, found_end)
         draw_avatar(avatar)
 
         if gfx.space_key:

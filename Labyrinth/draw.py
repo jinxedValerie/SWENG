@@ -23,7 +23,9 @@ def _block_to_vpixel(pos: Block_Position) -> VPixel_Position:
         pos[1] * BLOCK_SIZE
     )
 
-def draw_map(map: Map):
+found_end_animation_keyframe = 0
+
+def draw_map(map: Map, end_found: bool = False):
         # init_gfx_once((len(map.grid[0]) * BLOCK_SIZE, len(map.grid) * BLOCK_SIZE), MAX_RESOLUTION)
 
         # draw background
@@ -43,7 +45,23 @@ def draw_map(map: Map):
         # draw POIs
         
         draw_center_padded_rectangle(map.start[0] * BLOCK_SIZE, map.start[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.RED, POI_SIZE_RATIO)
-        draw_center_padded_rectangle(map.end[0] * BLOCK_SIZE, map.end[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.GREEN, POI_SIZE_RATIO)
+        
+        if end_found:
+            global found_end_animation_keyframe
+            match found_end_animation_keyframe:
+                case 0:
+                    draw_center_padded_rectangle(map.end[0] * BLOCK_SIZE, map.end[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.GREEN, POI_SIZE_RATIO)
+                case 1:
+                    draw_center_padded_rectangle(map.end[0] * BLOCK_SIZE, map.end[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.GREEN, 1)
+                case 2:
+                    draw_center_padded_rectangle(map.end[0] * BLOCK_SIZE, map.end[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.GREEN, POI_SIZE_RATIO)
+                case 3:
+                    draw_center_padded_rectangle(map.end[0] * BLOCK_SIZE, map.end[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.GREEN, POI_SIZE_RATIO / 2)
+            found_end_animation_keyframe += 1
+            found_end_animation_keyframe %= 4
+
+        else:
+            draw_center_padded_rectangle(map.end[0] * BLOCK_SIZE, map.end[1] * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, Color.GREEN, POI_SIZE_RATIO)
 
 
         # outer_size = PIXELS_PER_BLOCK
@@ -57,3 +75,9 @@ def draw_map(map: Map):
 
         # gfx_stack.set_pixel((self.start[0] * pixel_size, self.start[1] * pixel_size), "Brown")
         # gfx_stack.set_pixel((self.end[0] * pixel_size, self.end[1] * pixel_size), "Christi")
+
+def draw_avatar(avatar: Avatar):
+    draw_equilateral_triangle(
+        _block_to_vpixel(avatar.pos),
+        BLOCK_SIZE, avatar.facing, Color.BLUE
+    )

@@ -30,7 +30,6 @@ def draw_equilateral_triangle(top_left: VPixel_Position, size: int, direction: D
     y = 0
     while (width > 0):
         for x in range(width):
-            print(x, y, padding, width)
             canvas[y][x + padding] = True
         
         padding += 1

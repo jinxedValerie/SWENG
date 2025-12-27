@@ -6,7 +6,7 @@ import kommandozeilen_argumente as cmdargs
 from avatar import Avatar
 from map import Map
 from pathlib import Path
-from draw import draw_map, init_draw, draw_avatar
+from draw import draw_map, init_draw, draw_avatar, draw_step_trace
 
 found_end = False
 
@@ -31,6 +31,7 @@ def main():
         # gfx.color_demo_paint_on_surface()
 
         draw_map(map, found_end)
+        draw_step_trace(avatar, trace_width_ratio=0.5) 
         draw_avatar(avatar)
 
         if gfx.space_key:

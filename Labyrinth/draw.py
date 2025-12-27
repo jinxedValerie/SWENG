@@ -81,3 +81,14 @@ def draw_avatar(avatar: Avatar):
         _block_to_vpixel(avatar.pos),
         BLOCK_SIZE, avatar.facing, Color.BLUE
     )
+
+
+def draw_step_trace(avatar: Avatar, trace_width_ratio: float = 0.1):
+    for step in avatar.step_memory:
+        draw_rectange(
+            step.starting[0] * BLOCK_SIZE + BLOCK_SIZE // 2,
+            step.starting[1] * BLOCK_SIZE + BLOCK_SIZE // 2,
+            step.direction.dx * BLOCK_SIZE if step.direction.dx != 0 else round(BLOCK_SIZE * trace_width_ratio),
+            step.direction.dy * BLOCK_SIZE if step.direction.dy != 0 else round(BLOCK_SIZE * trace_width_ratio),
+            Color.BLUE_GRAY
+        )

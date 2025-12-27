@@ -2,6 +2,7 @@ from enum import Enum, auto
 from typing import TypeAlias
 from random import randint
 
+
 VPixel_Position: TypeAlias = tuple[int, int]
 Block_Position: TypeAlias = tuple[int, int]
 
@@ -78,3 +79,6 @@ class Color(Enum):
     GREEN = "Christi"
     BLUE = "Venice Blue"
     PURPLE = "Clairvoyant"
+    PINK = "Plum"
+    YELLOW = "Golden Fizz"
+    BLUE_GRAY = "Light Steel Blue"

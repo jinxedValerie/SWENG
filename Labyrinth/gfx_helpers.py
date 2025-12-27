@@ -1,11 +1,17 @@
 import gfx_stack
 import math
 from type_defs import Direction, Color, VPixel_Position, VPixel_Resolution, Pixel_Resolution
-from typing import Any
+from typing import Any, Literal
+
+def sign(a: int) -> Literal[1] | Literal[-1]:
+    if a >= 0:
+        return 1
+    return -1
 
 def draw_rectange(x: int, y: int, width: int, height: int, color: Color):
-    for width_offset in range(width):
-        for height_offset in range(height):
+    draw_direction_x, draw_direction_y = sign(width), sign(height)
+    for width_offset in range(0, width, draw_direction_x):
+        for height_offset in range(0, height, draw_direction_y):
             gfx_stack.set_pixel(
                 (x + width_offset,
                  y + height_offset), 

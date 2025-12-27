@@ -1,12 +1,6 @@
 from typing import TypeAlias, TextIO
-from enum import Enum, auto
 from pathlib import Path
-from type_defs import Block_Position
-
-
-class Block(Enum):
-    WALL = auto()
-    WAY = auto()
+from type_defs import Block_Position, Block
 
 Grid: TypeAlias = list[list[Block]]
 
@@ -86,3 +80,8 @@ class Map:
 
     def map_size(self) -> tuple[int, int]:
         return (len(self.grid[0]), len(self.grid))
+
+    def get(self, pos: Block_Position) -> Block:
+        if (0 <= pos[0] < self.map_size()[0]) and (0 <= pos[1] < self.map_size()[1]): # Bounds check
+            return self.grid[pos[1]][pos[0]]
+        return Block.WALL

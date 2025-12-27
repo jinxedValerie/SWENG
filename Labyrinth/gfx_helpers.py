@@ -1,6 +1,6 @@
 import gfx_stack
 import math
-from type_defs import Position, Direction, Color
+from type_defs import Direction, Color, VPixel_Position, VPixel_Resolution, Pixel_Resolution
 from typing import Any
 
 def draw_rectange(x: int, y: int, width: int, height: int, color: Color):
@@ -23,7 +23,7 @@ def create_default_matrix(x: int, y: int, value: Any) -> list[list[Any]]:
 def rotate_matrix_clockwise_90(matrix: list[list[Any]]) -> list[list[Any]]: 
     return [list(a) for a in zip(*reversed(matrix))]
 
-def draw_equilateral_triangle(top_left: Position, size: int, direction: Direction, color: Color):
+def draw_equilateral_triangle(top_left: VPixel_Position, size: int, direction: Direction, color: Color):
     canvas: list[list[bool]] = create_default_matrix(size, size, False)
     width, padding = size, 0
 
@@ -36,22 +36,8 @@ def draw_equilateral_triangle(top_left: Position, size: int, direction: Directio
         padding += 1
         width -= 2
         y += 1
-
-    # for y in range(len(canvas)):
-    #     for x in range(width):
-    #         print(x, y, padding, width)
-    #         canvas[y][x + padding] = True
-
-    #     width -= 2
-    #     padding += 1
-        
     
-    
-    needed_rotations = direction.value - Direction.SOUTH.value
-    if needed_rotations < 0:
-        needed_rotations += len(Direction)
-    
-    for _ in range(needed_rotations):
+    for _ in range(Direction.SOUTH.needed_rotations(direction)):
         canvas = rotate_matrix_clockwise_90(canvas)
 
 
@@ -69,15 +55,14 @@ def draw_equilateral_triangle(top_left: Position, size: int, direction: Directio
 
 
 
-
 gfx_initialized = False
 
-def init_gfx_once(vpixel_resolution: tuple[int, int], max_resolution: tuple[int, int] = (640, 480)):
+def init_gfx_once(vpixel_resolution: VPixel_Resolution, max_resolution: Pixel_Resolution = (640, 480)):
     global gfx_initialized
     
     if not gfx_initialized:
 
-        window_size: tuple[int, int]
+        window_size: Pixel_Resolution
         if vpixel_resolution[0] / vpixel_resolution[1] > max_resolution[0] / max_resolution[1]:   # make window always fit into max_resolution
             window_size = (
                 max_resolution[0],

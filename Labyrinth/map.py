@@ -1,7 +1,7 @@
 from typing import TypeAlias, TextIO
 from enum import Enum, auto
 from pathlib import Path
-from type_defs import Position
+from type_defs import Block_Position
 
 
 class Block(Enum):
@@ -12,24 +12,24 @@ Grid: TypeAlias = list[list[Block]]
 
 class Map:
     grid: Grid
-    start: Position
-    end: Position
-    bonus_points: list[Position]
+    start: Block_Position
+    end: Block_Position
+    bonus_points: list[Block_Position]
 
     def __init__(self, filepath: Path) -> None:
         self.grid, self.start, self.end, self.bonus_points = self.parse_map(filepath)
 
     @staticmethod
-    def parse_map(filepath: Path) -> tuple[Grid, Position, Position, list[Position]]:
+    def parse_map(filepath: Path) -> tuple[Grid, Block_Position, Block_Position, list[Block_Position]]:
         file: TextIO = open(filepath)
 
         file_data: list[str] = file.read().splitlines()
         file.close()
         
         grid: Grid = Grid()
-        start: Position
-        finish: Position
-        bonus_points: list[Position] = []
+        start: Block_Position
+        finish: Block_Position
+        bonus_points: list[Block_Position] = []
 
         for y, row in enumerate(file_data):
             parsed_row: list[Block] = []

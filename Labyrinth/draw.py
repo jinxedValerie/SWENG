@@ -1,20 +1,27 @@
 from typing import assert_never
 
+from avatar import Avatar
 from map import Map, Block
-from type_defs import Color, Direction, Position, Resolution
+from type_defs import Color, Pixel_Resolution, VPixel_Resolution, Block_Position, VPixel_Position
 from gfx_helpers import init_gfx_once, draw_rectange, draw_center_padded_rectangle, draw_equilateral_triangle
 
 POI_SIZE_RATIO = .6
 BLOCK_SIZE = 5    # length of edges not area (more explicitly: VIRUAL_PIXELS_PER_BLOCK_LENGTH)
-VPIXEL_RESOLUTION: Resolution
-MAX_RESOLUTION: Resolution = (640, 480)
+VPIXEL_RESOLUTION: VPixel_Resolution
+MAX_RESOLUTION: Pixel_Resolution = (640, 480)
 
-def init_draw(map_size: Resolution, block_size: int = BLOCK_SIZE, max_resolution: Resolution = MAX_RESOLUTION):
+def init_draw(map_size: tuple[int, int], block_size: int = BLOCK_SIZE, max_resolution: Pixel_Resolution = MAX_RESOLUTION):
     global VPIXEL_RESOLUTION, MAX_RESOLUTION, BLOCK_SIZE 
     BLOCK_SIZE = block_size
     VPIXEL_RESOLUTION = (map_size[0] * BLOCK_SIZE, map_size[1] * BLOCK_SIZE)
     MAX_RESOLUTION = max_resolution
     init_gfx_once(VPIXEL_RESOLUTION, MAX_RESOLUTION)
+
+def _block_to_vpixel(pos: Block_Position) -> VPixel_Position:
+    return (
+        pos[0] * BLOCK_SIZE,
+        pos[1] * BLOCK_SIZE
+    )
 
 def draw_map(map: Map):
         # init_gfx_once((len(map.grid[0]) * BLOCK_SIZE, len(map.grid) * BLOCK_SIZE), MAX_RESOLUTION)

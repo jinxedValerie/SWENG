@@ -9,7 +9,7 @@ micropython.alloc_emergency_exception_buf(100)
 TX_PIN = Pin(16)
 RX_PIN = Pin(17)
 
-BTN = Pin(15, Pin.IN, Pin.PULL_DOWN)
+BTN = Pin(15, Pin.IN, Pin.PULL_UP)
 
 CON = UART(0, baudrate=9600, bits=8, parity=None, stop=2, rx=RX_PIN, tx=TX_PIN)
 
@@ -22,14 +22,14 @@ CON = UART(0, baudrate=9600, bits=8, parity=None, stop=2, rx=RX_PIN, tx=TX_PIN)
 
 # con.irq(read_transmission, UART.IRQ_RXIDLE, False)
 
-def caesar_ciper(input: str, shift: int) -> str:
+
+def caesar_cipher(input: str, shift: int) -> str:
     message = ""
     for c in input.upper():
         if not (ord("A") <= ord(c) <= ord("Z")):    # ignore special characters
             message += c
             continue
-        new_c = chr((ord(c) - ord("A") % 26) + ord("A"))
-        message += new_c
+        message += chr(((ord(c) - ord("A") + shift) % 26) + ord("A"))
     return message
 
 def send_message(_: None):
@@ -50,6 +50,8 @@ def handle_button_press(pin: Pin):
     machine.enable_irq(irq_state)   # reenable IRQs
 
 BTN.irq(handler=handle_button_press, trigger=Pin.IRQ_RISING, hard=False)
+
+print("RUNNING")
 
 while True:
     if CON.any():

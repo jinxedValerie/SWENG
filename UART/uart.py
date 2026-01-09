@@ -22,10 +22,20 @@ CON = UART(0, baudrate=9600, bits=8, parity=None, stop=2, rx=RX_PIN, tx=TX_PIN)
 
 # con.irq(read_transmission, UART.IRQ_RXIDLE, False)
 
+def caesar_ciper(input: str, shift: int) -> str:
+    message = ""
+    for c in input.upper():
+        if not (ord("A") <= ord(c) <= ord("Z")):    # ignore special characters
+            message += c
+            continue
+        new_c = chr((ord(c) - ord("A") % 26) + ord("A"))
+        message += new_c
+    return message
+
 def send_message(_: None):
-    MESSAGE = "HELLO WORLD"
-    CON.write(MESSAGE)
-    print(f"Sent message: {MESSAGE}")
+    MESSAGE = "HELLO WORLD!"
+    sent_bytes = CON.write(MESSAGE)
+    print(f"Sent message: {MESSAGE} ({sent_bytes})")
 
 DEBOUNCE_MARGIN = 100
 last_button_press = ticks_ms()

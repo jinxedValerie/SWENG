@@ -27,7 +27,7 @@ def encode(message, key):
             continue
         num_ascii = ord(char) - ord("A")
         new_num_ascii = (num_ascii + key) % 26
-        new_char = chr(new_num_ascii)
+        new_char = chr(new_num_ascii + ord("A"))
         new_word += new_char
     return new_word
 

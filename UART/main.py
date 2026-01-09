@@ -22,7 +22,7 @@ def key_input():
 
 
 #--------------calc new letter------------------
-def new_letter_fn(letter, case_offset, key):                       #97 lower, 65 upper 
+def find_new_letter(letter, case_offset, key):                       #97 lower, 65 upper 
     letter_num = ord(letter) - case_offset
     new_num = ((letter_num + key) % 26) +case_offset
     new_letter = chr(new_num)
@@ -31,16 +31,15 @@ def new_letter_fn(letter, case_offset, key):                       #97 lower, 65
 
 #----------------Encoder-------------------------
 
-def encoder(message_in, key):
-    message = message_in
+def encoder(message, key):
     new_word = ""
     for letter in message:
         if ord(letter)==32:             #Leerzeichen
              new_letter = " "
         elif letter.islower():
-             new_letter= new_letter_fn(letter, 97, key)
+             new_letter= find_new_letter(letter, 97, key)
         else:
-             new_letter= new_letter_fn(letter,65, key)
+             new_letter= find_new_letter(letter,65, key)
         new_word += new_letter
     return new_word
 
@@ -48,19 +47,8 @@ def encoder(message_in, key):
 
 #-----------------Decoder---------------------
 
-def decoder(message_in, key):
-    message = message_in
-    new_word = ""
-    key_rev= -1 * key
-    for letter in message:
-        if ord(letter)==32:             #Leerzeichen
-             new_letter = " "
-        elif letter.islower():
-             new_letter= new_letter_fn(letter, 97, key_rev)
-        else:
-             new_letter= new_letter_fn(letter,65, key_rev)
-        new_word += new_letter
-    return new_word
+def decoder(message, key):
+    return encoder(message, key *-1)
 
 
 #------------------send message------------------

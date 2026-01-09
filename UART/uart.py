@@ -1,62 +1,33 @@
-import machine
-from machine import UART, Pin, idle
-import micropython
-from micropython import schedule
-from time import ticks_ms, ticks_diff
+import random
 
-micropython.alloc_emergency_exception_buf(100)
+alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 
-TX_PIN = Pin(16)
-RX_PIN = Pin(17)
+n = 2
+wort = input("Wort:d")
+print(wort)
+verschoben = str()
 
-BTN = Pin(15, Pin.IN, Pin.PULL_DOWN)
+def verschiebung(buch):
+    def Eingabe_prufen():
+        if buch in alphabet:
+            return alphabet.index(buch)
+        else:
+            print("Eingabe nicht richtig")
 
-CON = UART(0, baudrate=9600, bits=8, parity=None, stop=2, rx=RX_PIN, tx=TX_PIN)
+    index = Eingabe_prufen()
 
-
-# def read_transmission(rx: UART):
-#     bytes = rx.read()
-
-# def tx_detected():
-#     schedule(handle_tx, None)
-
-# con.irq(read_transmission, UART.IRQ_RXIDLE, False)
-
-def caesar_ciper(input: str, shift: int) -> str:
-    message = ""
-    for c in input.upper():
-        if not (ord("A") <= ord(c) <= ord("Z")):    # ignore special characters
-            message += c
-            continue
-        new_c = chr((ord(c) - ord("A") % 26) + ord("A"))
-        message += new_c
-    return message
-
-def send_message(_: None):
-    MESSAGE = "HELLO WORLD!"
-    sent_bytes = CON.write(MESSAGE)
-    print(f"Sent message: {MESSAGE} ({sent_bytes})")
-
-DEBOUNCE_MARGIN = 100
-last_button_press = ticks_ms()
-def handle_button_press(pin: Pin):
-    irq_state = machine.disable_irq()   # disable IRQs to prevent multiple repeated calls
-
-    global last_button_press
-    if (ticks_diff(ticks_ms(), last_button_press) > DEBOUNCE_MARGIN):
-        last_button_press = ticks_ms()
-        schedule(send_message, None)
+    def verschieben(i): 
+        neu = i + n
+        while neu > len(alphabet)-1:
+            neu = neu -len(alphabet)
+        return neu
+    
+    def anzeigen(neuu):
+        print(alphabet[neuu])
+        global verschoben 
+        verschoben = verschoben.__add__(alphabet[neuu])
         
-    machine.enable_irq(irq_state)   # reenable IRQs
+    anzeigen(verschieben(index))
 
-BTN.irq(handler=handle_button_press, trigger=Pin.IRQ_RISING, hard=False)
-
-while True:
-    if CON.any():
-        bytes = CON.read()
-        assert bytes is not None
-
-        message = bytes.decode() 
-        print(message)
-
-    idle()
+for i in range (len(wort)):
+    verschiebung(wort[i])

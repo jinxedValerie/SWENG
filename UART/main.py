@@ -1,100 +1,92 @@
 from machine import UART, Pin
 from time import sleep
 
-uart1 = UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1), bits=8, parity=None, stop=1)
-message_out= ""
-message_in= ""
+uart_connection = UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1), bits=8, parity=None, stop=1) # Initialize UART connection
+
 
 #--------------check input--------------------
-def type_input():
-    print("what do you want to send? (No special Characters!)")
-    type_input = input()
+def message_input():
+    """Prompts user for the message to encrypt"""
+
+    type_input = input("what do you want to send?\n")
     return type_input
 
 
 def key_input():
-    print("what key do you want to use?")
-    key_input_str = input()
-    key_input_raw = int(key_input_str)
-    key_input= key_input_raw % 26
+    """Prompts user for the shift key"""
+
+    key_input_str = input("what key do you want to use?\n")
+    key_input = int(key_input_str)
     return key_input
 
 
-
-#--------------calc new letter------------------
-def find_new_letter(letter, case_offset, key):                       #97 lower, 65 upper 
-    letter_num = ord(letter) - case_offset
-    new_num = ((letter_num + key) % 26) +case_offset
-    new_letter = chr(new_num)
-    return new_letter
-
-
-#----------------Encoder-------------------------
-
-def encoder(message, key):
+#----------------Ceasar Cipher-------------------------
+def ceasar_cipher(message: str, key: int):
+    """Encrypt message using a key with the ceasar cipher algorithm"""
     new_word = ""
-    for letter in message:
-        if ord(letter)==32:             #Leerzeichen
-             new_letter = " "
-        elif letter.islower():
-             new_letter= find_new_letter(letter, 97, key)
-        else:
-             new_letter= find_new_letter(letter,65, key)
-        new_word += new_letter
+    for char in message.upper():                        # shift one character at a time
+        if not (ord("A") <= ord(char) <= ord("Z")):     # ignore special characters
+            new_word += char
+            continue
+        char_num = ord(char) - ord("A")                 # convert to alphabet index space
+        new_char_num = (char_num + key) % 26            # shift and wrap around to stay within the normal alphabet
+        new_char = chr(new_char_num + ord("A"))         # convert back to character from alphabet index space
+        new_word += new_char
     return new_word
 
 
+#----------------Ceasar Cipher Aliases-------------------------
+def encrypt(message, key):
+    return ceasar_cipher(message, key)
 
-#-----------------Decoder---------------------
-
-def decoder(message, key):
-    return encoder(message, key *-1)
+def decrypt(message, key):
+    return ceasar_cipher(message, -key)     # Decrypting is just encrypting with the negative key
 
 
 #------------------send message------------------
+def send(key: int):
+    """Gets input, encrypts it, and then send via UART"""
 
-def send():
-    key = key_input()
-    message_text = encoder(type_input(), key)
-    payload = f"{message_text};{key}\n"
-    uart1.write(payload.encode('utf-8'))
-    print("sending data...")
+    payload = encrypt(message_input(), key)
+    uart_connection.write(payload)
+    print("sent data...")
+
 
 #---------------recieve message--------------------
-def recieve(): 
+def recieve(key: int): 
+    """Waits until a message gets recieved and then returns it"""
+
     print("Waiting...")
-    while not uart1.any():
+    while not uart_connection.any():    # Check if there is data in the buffer
         print("...")
         sleep(0.3)
-    raw_data = uart1.readline()
-    if raw_data:
-        formatted = raw_data.decode('utf-8').strip()
-        message_parts = formatted.split(";")
-        if len(message_parts) == 2:
-            text = message_parts[0]
-            key = int(message_parts[1])
-            print("Message:", decoder(text, key))
-        else:
-            print("Received eroor data:", formatted)
-    
 
+    bytes = uart_connection.read()                          # Read the incoming data bytes
+    assert bytes is not None                                # Appease the type-checker (and sanity check)
+    encrypted_message = bytes.decode()                      # Decode bytes to a string (UTF-8 by default)
+    decrypted_message = decrypt(encrypted_message, key)     # Decrypt the received string using the key
+
+    return decrypted_message
 
 
 #---------------------main-----------------
 def main():
-        print("Do you want to send or recieve a message? \n" \
-        "[1] Send \n[2] Recieve")
-        user_choice= input()
+        user_choice= input("Do you want to send or recieve a message? \n" \
+        "[1] Send \n[2] Recieve\n")     # Ask user for mode
+        key = key_input()               # Get the secret key (must match on both devices)
+
         if user_choice == "1":
-            send()
+            send(key)
         elif user_choice == "2":
-            recieve()
-        else: print("Not a valid choice!")    
+            recieved_message = recieve(key)
+            print(recieved_message)
+
+        else: 
+            print("Not a valid choice!")    
         
 
-
 if __name__== "__main__":
-    main()
+    main()      # could optionally also be wrapped in a while True loop to keep sending or recieving
 
 
 

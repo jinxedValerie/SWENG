@@ -28,9 +28,9 @@ def ceasar_cipher(message: str, key: int):
         if not (ord("A") <= ord(char) <= ord("Z")):     # ignore special characters
             new_word += char
             continue
-        num_ascii = ord(char) - ord("A")                # convert to alphabet index space
-        new_num_ascii = (num_ascii + key) % 26          # shift and wrap around to stay within the normal alphabet
-        new_char = chr(new_num_ascii + ord("A"))        # convert back to character from alphabet index space
+        char_num = ord(char) - ord("A")                 # convert to alphabet index space
+        new_char_num = (char_num + key) % 26            # shift and wrap around to stay within the normal alphabet
+        new_char = chr(new_char_num + ord("A"))         # convert back to character from alphabet index space
         new_word += new_char
     return new_word
 

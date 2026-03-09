@@ -1,9 +1,8 @@
 import gfx_stack as gfx
 import player
-import map
+from map import Map
 
-
-def draw():
+def draw(map: Map):
     width,height = map.size()
     start = map.get_start()
     finish = map.get_finish()
@@ -20,32 +19,22 @@ def draw():
             elif type == "Wall": 
                 gfx.set_pixel(pos,'Deep Koamaru')
 
-           gfx.set_pixel(start, 'Plum')
+    gfx.set_pixel(start, 'Plum')
 
-           gfx.set_pixel(finish, 'Clairvoyant')
+    gfx.set_pixel(finish, 'Clairvoyant')
                 
-    for coin_pos in range(len(coins)):
-        x,y,value = coins(coin_pos)
-        pos = (x,y)
-        if type == pos:
-            gfx.set_pixel(pos, 'Tahiti Gold')
+    for coin in coins:
+        (pos),value = coin
+        gfx.set_pixel(pos, 'Tahiti Gold')
 
     pos_player = player.position()
     gfx.set_pixel(pos_player, "Brown")
-    moved = player.seen_pos()
-    for p in range(len(moved)):    
-        gfx.set_pixel(moved[p], "Mandy")
-
-def main():
     
-    draw_map()
-    draw_player()
+    moved = player.seen_pos()
+    for position in moved:    
+        gfx.set_pixel(position, "Mandy")
 
     while not gfx.stop_prog:
         gfx.event_loop()
 
     gfx.quit_prog()
-
-if __name__ == "__main__":
-    main()
-    

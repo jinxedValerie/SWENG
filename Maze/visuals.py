@@ -4,13 +4,12 @@ import map
 
 
 def draw():
-    width,hight = map.size()
+    width,height = map.size()
     start = map.get_start()
     finish = map.get_finish()
     coins = map.get_coins()
-    gfx.init_once(width,hight)
 
-    for y in range(hight):
+    for y in range(height):
         for x in range (width):
             type = map.check_coordinates(x,y)
             pos = (x,y)
@@ -26,17 +25,19 @@ def draw():
 
             elif type == finish: 
                 gfx.set_pixel(pos, 'Clairvoyant')
-           
-            elif type == coins:
-                gfx.set_pixel(pos, 'white')
+                
+           for coin_pos in range(len(coins)):
+                if type == coins[coin_pos]:
+                    gfx.set_pixel(coins[coin_pos], 'white')
 
     pos_player = player.position()
     gfx.set_pixel(pos_player, "Brown")
     moved = player.seen_pos()
-    gfx.set_pixel(moved, "Mandy")
+    for p in range(len(moved)):    
+        gfx.set_pixel(moved[p], "Mandy")
 
 def main():
-   
+    
     draw_map()
     draw_player()
 

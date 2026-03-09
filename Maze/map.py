@@ -49,7 +49,7 @@ class Map:
     def size(self):
         return (len(self.gridlist[0]),len(self.gridlist))
 
-    def check_coordinate(self,position):
+    def check_coordinates(self,position):
         x= position[0]
         y= position[1]
         if x < 0 or x >= len(self.gridlist[0]) or y < 0 or y >= len(self.gridlist):
@@ -66,7 +66,7 @@ class Map:
         return self.coins
     
 def self_test():
-    testmap = Map(r"SWENG\Maze\mazes\test-maze.txt")
+    testmap = Map("./mazes/test-maze.txt")
 
     grid = testmap.gridlist
     assert grid == [['Path', 'Path', 'Wall'], ['Wall', 'Path', 'Wall'], ['Path', 'Path', 'Wall']]
@@ -82,7 +82,7 @@ def self_test():
     coins = testmap.get_coins()
     assert coins == [((1, 1), 1)]
 
-    checkedcords = testmap.check_coordinate((2,2))
+    checkedcords = testmap.check_coordinates((2,2))
     assert checkedcords == "Wall"
     
 

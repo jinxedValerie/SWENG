@@ -17,7 +17,7 @@ class Player:
         self.view = (self.view + 90) % 360                                         #look right
         spot= find_spot(self.view, self.current_position)
         
-        while self.current_map.check_coordinate(spot) != "Path":                   #look straight,left,back
+        while self.current_map.check_coordinates(spot) != "Path":                   #look straight,left,back
             self.view = (self.view - 90) % 360  
             spot= find_spot(self.view, self.current_position)
         self.current_position=spot

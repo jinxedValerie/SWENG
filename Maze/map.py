@@ -10,21 +10,29 @@ class Map:
             for y, row in enumerate(file):
                 row_clean = row.strip()
                 rowlist = []
+                rowlist.append("Blub")
                 for x, char in enumerate(row_clean):
-                    if char == ".":
+                    if char == "." or char == "X" :
                         rowlist.append("Path")
                     elif char =="W":
                         rowlist.append("Wall")
                     elif char == "S":
                         rowlist.append("Path")
-                        self.start = (x,y)
+                        self.start = (x +1,y+1)
                     elif char == "Z":
                         rowlist.append("Path")
-                        self.finish = (x,y)
+                        self.finish = (x+1,y+1)
                     elif char.isdigit():
                         rowlist.append("Path")
-                        self.coins.append((x,y,int(char)))
+                        self.coins.append((x +1,y +1,int(char)))
+                rowlist.append("Blub")
                 self.gridlist.append(rowlist)
+        blublist=list()
+        for x in self.gridlist[0]:
+            blublist.append("Blub")
+        self.gridlist.insert(0,blublist)
+        self.gridlist.append(blublist)
+        
         
 
     def size(self):
@@ -44,7 +52,7 @@ class Map:
         
 
 def self_test():
-    testmap = Map(r"SWENG\Maze\mazes\test-maze.txt")
+    testmap = Map(r"Maze/mazes/test-maze.txt")
     size = testmap.size()
     start = testmap.get_start()
     finish = testmap.get_finish()

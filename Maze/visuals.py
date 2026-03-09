@@ -1,8 +1,8 @@
 import gfx_stack as gfx
-import player
+from player import Player
 from map import Map
 
-def draw(map: Map):
+def draw(map: Map, player: Player):
     width,height = map.size()
     start = map.get_start()
     finish = map.get_finish()
@@ -33,8 +33,3 @@ def draw(map: Map):
     moved = player.seen_pos()
     for position in moved:    
         gfx.set_pixel(position, "Mandy")
-
-    while not gfx.stop_prog:
-        gfx.event_loop()
-
-    gfx.quit_prog()

@@ -25,8 +25,10 @@ def draw():
            gfx.set_pixel(finish, 'Clairvoyant')
                 
     for coin_pos in range(len(coins)):
-        if type == coins[coin_pos]:
-            gfx.set_pixel(coins[coin_pos], 'white')
+        x,y,value = coins(coin_pos)
+        pos = (x,y)
+        if type == pos:
+            gfx.set_pixel(pos, 'Tahiti Gold')
 
     pos_player = player.position()
     gfx.set_pixel(pos_player, "Brown")

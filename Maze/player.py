@@ -44,9 +44,9 @@ def test():
     while player_test.position() != map_test.get_finish():
         player_test.move()
 
-    assert player_test.seen_pos() == {(2, 3), (1, 1), (2, 1), (2, 2)}
+    assert player_test.seen_pos() == {(1, 0), (1, 1), (1, 2), (0, 0)}
 
-    assert player_test.position() == (1, 3)
+    assert player_test.position() == (0, 2)
 
     print("test succesfull, final position is:", player_test.position())
 

@@ -66,7 +66,7 @@ class Map:
         return self.coins
     
 def self_test():
-    testmap = Map("./mazes/test-maze.txt")
+    testmap = Map("./Maze/mazes/test-maze.txt")
 
     grid = testmap.gridlist
     assert grid == [['Path', 'Path', 'Wall'], ['Wall', 'Path', 'Wall'], ['Path', 'Path', 'Wall']]

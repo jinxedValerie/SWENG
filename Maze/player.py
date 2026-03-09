@@ -16,9 +16,6 @@ class Player:
 
         self.view = (self.view + 90) % 360                                         #look right
         spot= find_spot(self.view, self.current_position)
-        if self.current_map.check_coordinate(spot) == "Path":
-            self.current_position = spot
-            return 
         
         while self.current_map.check_coordinate(spot) != "Path":                   #look straight,left,back
             self.view = (self.view - 90) % 360  
@@ -31,10 +28,8 @@ class Player:
     
 
 
-
 def find_spot(view, position):
-    x= position[0]
-    y= position[1]
+    x,y= position[0], position[1]
     if view == 0: spot = (x , y+1)
     if view == 90: spot= (x-1 , y)
     if view == 180: spot= (x , y-1) 
@@ -42,16 +37,18 @@ def find_spot(view, position):
     return spot
 
 def test():
-    map_test= Map(r"Maze/mazes/Labyrinth-2.txt")
+    map_test= Map(r"Maze/mazes/test-maze.txt")
     player_test = Player(map_test)
-    print(player_test.position())
-    print(map_test.get_finish())
+    assert player_test.position() == map_test.get_start()
+
     while player_test.position() != map_test.get_finish():
         player_test.move()
-        print(player_test.position())
-        sleep(0.05)
-    print(player_test.seen_pos())
-    print(player_test.current_position)
+
+    assert player_test.seen_pos() == {(2, 3), (1, 1), (2, 1), (2, 2)}
+
+    assert player_test.position() == (1, 3)
+
+    print("test succesfull, final position is:", player_test.position())
 
 
 if __name__ == '__main__':

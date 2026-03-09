@@ -3,7 +3,7 @@ import player
 import map
 
 
-def draw_map():
+def draw():
     width,hight = map.size()
     start = map.get_start()
     finish = map.get_finish()
@@ -30,7 +30,6 @@ def draw_map():
             elif type == coins:
                 gfx.set_pixel(pos, 'white')
 
-def draw_player():
     pos_player = player.position()
     gfx.set_pixel(pos_player, "Brown")
     moved = player.seen_pos()

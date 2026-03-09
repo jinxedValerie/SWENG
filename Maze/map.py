@@ -38,7 +38,9 @@ class Map:
     def size(self):
         return (len(self.gridlist[0]),len(self.gridlist))
 
-    def check_coordinate(self,x,y):
+    def check_coordinate(self,position):
+        x= position[0]
+        y= position[1]
         return self.gridlist[y][x]
     
     def get_start(self):

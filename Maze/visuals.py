@@ -18,18 +18,18 @@ def draw(map: Map, player: Player):
 
             elif type == "Wall": 
                 gfx.set_pixel(pos,'Deep Koamaru')
-
-    gfx.set_pixel(start, 'Plum')
-
-    gfx.set_pixel(finish, 'Clairvoyant')
-                
+    
     for coin in coins:
         (pos),value = coin
         gfx.set_pixel(pos, 'Tahiti Gold')
 
-    pos_player = player.position()
-    gfx.set_pixel(pos_player, "Brown")
-    
     moved = player.seen_pos()
     for position in moved:    
         gfx.set_pixel(position, "Mandy")
+
+    pos_player = player.position()
+    gfx.set_pixel(pos_player, "Brown")
+    
+    gfx.set_pixel(start, 'Plum')
+
+    gfx.set_pixel(finish, 'Rainforest')

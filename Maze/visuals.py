@@ -20,15 +20,13 @@ def draw():
             elif type == "Wall": 
                 gfx.set_pixel(pos,'Deep Koamaru')
 
-            elif type == start:
-                gfx.set_pixel(pos, 'Plum')
+           gfx.set_pixel(start, 'Plum')
 
-            elif type == finish: 
-                gfx.set_pixel(pos, 'Clairvoyant')
+           gfx.set_pixel(finish, 'Clairvoyant')
                 
-           for coin_pos in range(len(coins)):
-                if type == coins[coin_pos]:
-                    gfx.set_pixel(coins[coin_pos], 'white')
+    for coin_pos in range(len(coins)):
+        if type == coins[coin_pos]:
+            gfx.set_pixel(coins[coin_pos], 'white')
 
     pos_player = player.position()
     gfx.set_pixel(pos_player, "Brown")

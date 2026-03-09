@@ -61,8 +61,7 @@ class Map:
         
 
 def self_test():
-    testmap = Map(r"SWENG\Maze\mazes\test-maze.txt")
-    grid = testmap.gridlist
+    testmap = Map("./mazes/test-maze.txt")
     size = testmap.size()
     start = testmap.get_start()
     finish = testmap.get_finish()

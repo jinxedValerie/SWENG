@@ -11,8 +11,8 @@ def draw():
 
     for y in range(height):
         for x in range (width):
-            type = map.check_coordinates(x,y)
             pos = (x,y)
+            type = map.check_coordinates(pos)
            
             if type == "Path":  
                 gfx.set_pixel(pos,'Black')

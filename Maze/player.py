@@ -7,7 +7,6 @@ class Player:
         self.current_position = tuple(self.current_map.get_start())
         self.visited_pos= set()
         self.view = 0                                                              #start looking down
-        return None
 
     def position(self):  
         return self.current_position
@@ -19,9 +18,9 @@ class Player:
         spot= find_spot(self.view, self.current_position)
         if self.current_map.check_coordinate(spot) == "Path":
             self.current_position = spot
-            return None
+            return 
         
-        while self.current_map.check_coordinate(spot) != "Path":        #look straight,left,back
+        while self.current_map.check_coordinate(spot) != "Path":                   #look straight,left,back
             self.view = (self.view - 90) % 360  
             spot= find_spot(self.view, self.current_position)
         self.current_position=spot
@@ -50,7 +49,7 @@ def test():
     while player_test.position() != map_test.get_finish():
         player_test.move()
         print(player_test.position())
-        sleep(0.2)
+        sleep(0.05)
     print(player_test.seen_pos())
     print(player_test.current_position)
 

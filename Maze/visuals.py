@@ -24,7 +24,7 @@ def draw(map: Map, player: Player):
                 gfx.set_pixel(pos,'Deep Koamaru')
     
     for coin in coins:
-        (pos),value = coin
+        pos, value = coin
         gfx.set_pixel(pos, 'Tahiti Gold')
 
     moved = player.seen_pos()
@@ -37,3 +37,20 @@ def draw(map: Map, player: Player):
     gfx.set_pixel(start, 'Plum')
 
     gfx.set_pixel(finish, 'Rainforest')
+
+
+def self_test():
+    gfx.init_once((3, 3))
+    gfx.set_pixel((0, 2), 'Plum')
+    gfx.set_pixel((1, 2), 'Plum')
+    gfx.set_pixel((2, 2), 'Plum')
+    gfx.set_pixel((1, 1), 'Plum')
+    gfx.set_pixel((1, 0), 'Plum')
+    
+    while not gfx.stop_prog:
+        gfx.event_loop()
+
+    gfx.quit_prog()
+
+if __name__ == "__main__":
+    self_test()

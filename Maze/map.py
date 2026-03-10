@@ -1,3 +1,7 @@
+"""
+Geschrieben von Marvin Horn
+"""
+
 class Map:
     
     def __init__(self, filepath) -> None:

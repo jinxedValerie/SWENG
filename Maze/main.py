@@ -1,3 +1,7 @@
+"""
+Geschrieben von allen
+"""
+
 import gfx_stack as gfx
 import cli
 import map as map_module

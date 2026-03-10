@@ -1,3 +1,8 @@
+"""
+Geschrieben von Jakob Röhrborn
+"""
+
+
 import argparse
 
 def get_file_path():

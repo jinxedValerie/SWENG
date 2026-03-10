@@ -1,3 +1,7 @@
+"""
+Geschrieben von Anna Degen
+"""
+
 from map import Map
 from time import sleep
 

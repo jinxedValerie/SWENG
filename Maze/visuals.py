@@ -1,3 +1,7 @@
+"""
+Geschrieben von Diana Masyluk
+"""
+
 import gfx_stack as gfx
 from player import Player
 from map import Map

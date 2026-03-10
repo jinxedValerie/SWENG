@@ -41,11 +41,11 @@ def draw(map: Map, player: Player):
 
 def self_test():
     gfx.init_once((3, 3))
-    gfx.set_pixel((0, 2), 'Plum')
-    gfx.set_pixel((1, 2), 'Plum')
-    gfx.set_pixel((2, 2), 'Plum')
-    gfx.set_pixel((1, 1), 'Plum')
-    gfx.set_pixel((1, 0), 'Plum')
+    gfx.set_pixel((0, 2), 'Clairvoyant')
+    gfx.set_pixel((1, 2), 'Clairvoyant')
+    gfx.set_pixel((2, 2), 'Clairvoyant')
+    gfx.set_pixel((1, 1), 'Clairvoyant')
+    gfx.set_pixel((1, 0), 'Clairvoyant')
     
     while not gfx.stop_prog:
         gfx.event_loop()

@@ -11,6 +11,7 @@
 #include "ADDS_21161_EzKit.h"
 #include <def21161.h>
 #include <math.h>
+#include <stddef.h>
 
 /*********************************************************/
 /* sampling frequency : 50 kHz */
@@ -33,7 +34,7 @@ extern float Right_Out;
 /*** variables *******************************************/
 int f = 0;           // control variable
 int h = 0;           // control variable
-int NumPoints = 1;   // control variable
+int NumPoints = 0;   // control variable
 int Degree = 20;     // degree of the filter, i.e. tap number
 float DelayLine[20]; // delay line for filter of degree 20
 int Index = 0;       // index for delay line
@@ -41,18 +42,21 @@ float Max = -10.0;   // to keep the maximum, initiated with a
                      // value well below any input signal
 
 /*** do the processing ***********************************/
-void Process_Data()
+void Process_Data() :
 {
+    NumPoints++;
+
+    float t = (float)NumPoints / (float)SAMPLINGRATE;
     /*********************************************************/
     /* place here code for control signals */
     switch (State)
     {
     case 0:
     {
-        /*********************************************************/
-        /* place here code for sinusoidal signals */
+        Right_Out = sinf(2.0 * PI * 1000.0 * t);
+        Left_Out = sinf(2.0 * PI * 2000.0 * t);
+
         break;
-        /*********************************************************/
     }
     case 1:
     {
@@ -63,6 +67,7 @@ void Process_Data()
     }
     case 2:
     {
+        Right_Out = Left_In;
         /*********************************************************/
         /* place here code for threshold signal */
         break;

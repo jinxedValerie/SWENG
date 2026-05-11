@@ -28,9 +28,8 @@ void main()
     *(int *)SP02MCTL |= MCE;
     /* Setup audio codec, SPORT0 and SPORT2*/
     Setup_AD1836();
-    18
-        /* execute a simple timer test */
-        a = 0;
+    /* execute a simple timer test */
+    a = 0;
     Init_Timer(10000000);
     interrupt(SIG_TMZ0, Timer_Test_Function);
     while (a < 10)

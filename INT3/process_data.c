@@ -68,13 +68,32 @@ void Process_Data() :
     case 2:
     {
         Right_Out = Left_In;
+        float phase = 0.0
+        if(Max < Left_In)
+        {
+            Max = Left_In;
+        }
+        float freq;
+        if(Left_In < 0.8 * Max){
+            freq=1000.0;
+        }
+        else{
+            freq=5000.0;
+        }
+
+        float step = 2.0 * PI * freq/SAMPLINGRATE;
+        phase += step
+
+        Left_OUT = sinf(phase)
+
         /*********************************************************/
         /* place here code for threshold signal */
         break;
         /*********************************************************/
     }
     case 3:
-    {
+    {   
+
         /*********************************************************/
         /* place here code for digital filter */
         break;

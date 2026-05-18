@@ -60,10 +60,12 @@ void Process_Data() :
     }
     case 1:
     {
-        /*********************************************************/
-        /* place here code for triangle / sawtooth signals */
+        float t1 = (float)NumPoints / (float)SAMPLINGRATE;
+        float t2 = ((float)NumPoints + 12.5)/ (float)SAMPLINGRATE;
+
+        Right_Out = 2.0* 1.0 *fabs(fmax(1.0 - fmod(2.0 * 1000 * t1, 2.0), -1.0)) - 1.0;
+        Left_Out = 2.0* 1.0 * fabs(fmax(1.0 - fmod(2.0 * 1000 * t2, 2.0), -1.0)) - 1.0;
         break;
-        /*********************************************************/
     }
     case 2:
     {

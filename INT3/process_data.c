@@ -41,6 +41,15 @@ int Index = 0;       // index for delay line
 float Max = -10.0;   // to keep the maximum, initiated with a
                      // value well below any input signal
 
+// repeating triangle function; repeats every 1 t; y: [-1, 1]
+float triangle_wave(float t)
+{
+    t = 2 * t;              // make repeating every 1 t
+    t = fmodf(x, 2) - 1;    // clamp t to [-1, 1)
+    float y = 1 - fabsf(x); // core function
+    return (2 * y) - 1      // clamp y to [-1, 1]
+}
+
 #define kHz (*1000.0)
 
 /*** do the processing ***********************************/
@@ -63,10 +72,11 @@ void Process_Data()
     case 1:
     {
         float t1 = (float)NumPoints / (float)SAMPLINGRATE;
-        float t2 = ((float)NumPoints + 12.5)/ (float)SAMPLINGRATE;
+        float t2 = ((float)NumPoints + 12.5) / (float)SAMPLINGRATE;
 
-        Right_Out = 2.0* 1.0 *fabs(fmax(1.0 - fmod(2.0 * 1000 * t1, 2.0), -1.0)) - 1.0;
-        Left_Out = 2.0* 1.0 * fabs(fmax(1.0 - fmod(2.0 * 1000 * t2, 2.0), -1.0)) - 1.0;
+        Right_Out = triangle_wave(1 kHz * t);
+        Left_Out = triangle_wave(1 kHz * t + 1 / 4);
+
         break;
     }
     case 2:
@@ -78,26 +88,26 @@ void Process_Data()
         }
         float freq;
         if (Left_In < 0.8 * Max)
-{
+        {
             freq = 1000.0;
         }
         else
-{
+        {
             freq = 5000.0;
         }
 
         float step = 2.0 * PI * freq / SAMPLINGRATE;
         phase += step
 
-        Left_OUT = sinf(phase)
+            Left_OUT = sinf(phase)
 
-        /*********************************************************/
-        /* place here code for threshold signal */
-        break;
+            /*********************************************************/
+            /* place here code for threshold signal */
+            break;
         /*********************************************************/
     }
     case 3:
-    {   
+    {
 
         /*********************************************************/
         /* place here code for digital filter */

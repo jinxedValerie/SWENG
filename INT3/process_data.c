@@ -90,7 +90,8 @@ void Process_Data()
     case 2:
     {
         Right_Out = Left_In;
-        float phase = 0.0 if (Max < Left_In)
+        float phase = 0.0;
+        if (Max < Left_In)
         {
             Max = Left_In;
         }
@@ -105,23 +106,18 @@ void Process_Data()
         }
 
         float step = 2.0 * PI * freq / SAMPLINGRATE;
-        phase += step
+        phase += step;
 
-            Left_OUT = sinf(phase)
+        Left_Out = sinf(phase);
 
-            /*********************************************************/
-            /* place here code for threshold signal */
-            break;
-        /*********************************************************/
+        break;
     }
     case 3:
     {
         Right_Out = Left_In;
         Left_Out = delay_line_filter(Left_In);
-        /*********************************************************/
-        /* place here code for digital filter */
+
         break;
-        /*********************************************************/
     }
     }
 }

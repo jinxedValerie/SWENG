@@ -23,7 +23,7 @@
 /*********************************************************/
 
 /*** constants and extern variables***********************/
-const float PI = 3.14159;
+const float PI = 3.14159f;
 const int SAMPLINGRATE = 50000;
 extern int State;
 extern float Left_In;
@@ -32,16 +32,16 @@ extern float Left_Out;
 extern float Right_Out;
 
 /*** variables *******************************************/
-int f = 0;               // control variable
-int h = 0;               // control variable
-int NumPoints = 0;       // control variable
-#define Degree 20        // degree of the filter, i.e. tap number
-float DelayLine[Degree]; // delay line for filter of degree 20
-int Index = 0;           // index for delay line
-float Max = -10.0;       // to keep the maximum, initiated with a
-                         // value well below any input signal
+int f = 0;                  // control variable
+int h = 0;                  // control variable
+unsigned int NumPoints = 0; // control variable
+#define Degree 20           // degree of the filter, i.e. tap number
+float DelayLine[Degree];    // delay line for filter of degree 20
+int Index = 0;              // index for delay line
+float Max = -10.0;          // to keep the maximum, initiated with a
+                            // value well below any input signal
 
-#define kHz *1000.0
+#define kHz *1000.0f
 
 // repeating triangle function; repeats every 1 t; y: [-1, 1]
 float triangle_wave(float t)
@@ -65,17 +65,17 @@ float delay_line_filter(float y)
 /*** do the processing ***********************************/
 void Process_Data()
 {
-    NumPoints++;
+    NumPoints++; // overflow?; should not practically happen during the tests, but might be relevant for long running applications
 
-    float t = (float)NumPoints / (float)SAMPLINGRATE; // rounding errors?; might get inlined anyway
+    float t = (float)NumPoints / (float)SAMPLINGRATE; // rounding errors?; might get inlined anyway, but for high values of t might still get inaccurate
     /*********************************************************/
     /* place here code for control signals */
     switch (State)
     {
     case 0:
     {
-        Right_Out = sinf(2.0 * PI * 1 kHz * t);
-        Left_Out = sinf(2.0 * PI * 2 kHz * t);
+        Right_Out = sinf(2.0f * PI * 1 kHz * t);
+        Left_Out = sinf(2.0f * PI * 2 kHz * t);
 
         break;
     }
@@ -83,32 +83,32 @@ void Process_Data()
     {
 
         Right_Out = triangle_wave(1 kHz * t);
-        Left_Out = triangle_wave(1 kHz * t + 1 / 4);
+        Left_Out = triangle_wave(1 kHz * t + 0.25f);
 
         break;
     }
     case 2:
     {
-        Right_Out = Left_In;      // control signal
-        static         float phase = 0.0; // continuis phase accumulator
-        if (Max < Left_In)        // adjust maximum at runtime
+        Right_Out = Left_In;       // control signal
+        static float phase = 0.0f; // continuis phase accumulator
+        if (Max < Left_In)         // adjust maximum at runtime
         {
             Max = Left_In;
         }
 
         float freq;
-        if (Left_In < 0.8 * Max) // adjust current frequency at runtime based on current input
+        if (Left_In < 0.8f * Max) // adjust current frequency at runtime based on current input
         {
-            freq = 1000.0;
+            freq = 1000.0f;
         }
         else
         {
-            freq = 5000.0;
+            freq = 5000.0f;
         }
 
-        float step = 2.0 * PI * freq / SAMPLINGRATE;
+        float step = 2.0f * PI * freq / SAMPLINGRATE;
         phase += step;
-phase = fmodf(phase, 2 * PI);
+        phase = fmodf(phase, 2.0f * PI);
 
         Left_Out = sinf(phase);
 

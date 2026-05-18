@@ -42,11 +42,11 @@ float Max = -10.0;   // to keep the maximum, initiated with a
                      // value well below any input signal
 
 /*** do the processing ***********************************/
-void Process_Data() :
+void Process_Data()
 {
     NumPoints++;
 
-    float t = (float)NumPoints / (float)SAMPLINGRATE;
+    float t = (float)NumPoints / (float)SAMPLINGRATE; // rounding errors?; might get inlined anyway
     /*********************************************************/
     /* place here code for control signals */
     switch (State)
@@ -70,20 +70,21 @@ void Process_Data() :
     case 2:
     {
         Right_Out = Left_In;
-        float phase = 0.0
-        if(Max < Left_In)
+        float phase = 0.0 if (Max < Left_In)
         {
             Max = Left_In;
         }
         float freq;
-        if(Left_In < 0.8 * Max){
-            freq=1000.0;
+        if (Left_In < 0.8 * Max)
+{
+            freq = 1000.0;
         }
-        else{
-            freq=5000.0;
+        else
+{
+            freq = 5000.0;
         }
 
-        float step = 2.0 * PI * freq/SAMPLINGRATE;
+        float step = 2.0 * PI * freq / SAMPLINGRATE;
         phase += step
 
         Left_OUT = sinf(phase)

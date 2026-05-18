@@ -89,14 +89,15 @@ void Process_Data()
     }
     case 2:
     {
-        Right_Out = Left_In;
-        float phase = 0.0;
-        if (Max < Left_In)
+        Right_Out = Left_In;      // control signal
+        static         float phase = 0.0; // continuis phase accumulator
+        if (Max < Left_In)        // adjust maximum at runtime
         {
             Max = Left_In;
         }
+
         float freq;
-        if (Left_In < 0.8 * Max)
+        if (Left_In < 0.8 * Max) // adjust current frequency at runtime based on current input
         {
             freq = 1000.0;
         }
@@ -107,6 +108,7 @@ void Process_Data()
 
         float step = 2.0 * PI * freq / SAMPLINGRATE;
         phase += step;
+phase = fmodf(phase, 2 * PI);
 
         Left_Out = sinf(phase);
 

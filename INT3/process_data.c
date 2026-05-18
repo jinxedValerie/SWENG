@@ -32,14 +32,16 @@ extern float Left_Out;
 extern float Right_Out;
 
 /*** variables *******************************************/
-int f = 0;           // control variable
-int h = 0;           // control variable
-int NumPoints = 0;   // control variable
-int Degree = 20;     // degree of the filter, i.e. tap number
-float DelayLine[20]; // delay line for filter of degree 20
-int Index = 0;       // index for delay line
-float Max = -10.0;   // to keep the maximum, initiated with a
+int f = 0;               // control variable
+int h = 0;               // control variable
+int NumPoints = 0;       // control variable
+#define Degree 20        // degree of the filter, i.e. tap number
+float DelayLine[Degree]; // delay line for filter of degree 20
+int Index = 0;           // index for delay line
+float Max = -10.0;       // to keep the maximum, initiated with a
                      // value well below any input signal
+
+#define kHz *1000.0
 
 // repeating triangle function; repeats every 1 t; y: [-1, 1]
 float triangle_wave(float t)

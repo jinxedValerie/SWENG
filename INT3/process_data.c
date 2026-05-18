@@ -41,6 +41,8 @@ int Index = 0;       // index for delay line
 float Max = -10.0;   // to keep the maximum, initiated with a
                      // value well below any input signal
 
+#define kHz (*1000.0)
+
 /*** do the processing ***********************************/
 void Process_Data()
 {
@@ -53,8 +55,8 @@ void Process_Data()
     {
     case 0:
     {
-        Right_Out = sinf(2.0 * PI * 1000.0 * t);
-        Left_Out = sinf(2.0 * PI * 2000.0 * t);
+        Right_Out = sinf(2.0 * PI * 1 kHz * t);
+        Left_Out = sinf(2.0 * PI * 2 kHz * t);
 
         break;
     }

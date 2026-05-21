@@ -41,8 +41,6 @@ int Index = 0;              // index for delay line
 float Max = -10.0;          // to keep the maximum, initiated with a
                             // value well below any input signal
 
-#define kHz *1000.0f
-
 // repeating triangle function; repeats every 1 t; y: [-1, 1]
 float triangle_wave(float t)
 {
@@ -66,7 +64,7 @@ float delay_line_filter(float y)
 void Process_Data()
 {
     NumPoints++; // overflow?; should not practically happen during the tests, but might be relevant for long running applications
-
+    NumPoints = fmodf(NumPoints, SAMPLINGRATE);
     float t = (float)NumPoints / (float)SAMPLINGRATE; // rounding errors?; might get inlined anyway, but for high values of t might still get inaccurate
     /*********************************************************/
     /* place here code for control signals */
@@ -74,17 +72,15 @@ void Process_Data()
     {
     case 0:
     {
-        Right_Out = sinf(2.0f * PI * 1 kHz * t);
-        Left_Out = sinf(2.0f * PI * 2 kHz * t);
+        Right_Out = sinf(2.0f * PI * 1000.0f * t);
+        Left_Out = sinf(2.0f * PI * 2000.0f * t);
 
         break;
     }
     case 1:
     {
-
-        Right_Out = triangle_wave(1 kHz * t);
-        Left_Out = triangle_wave(1 kHz * t + 0.25f);
-
+        Right_Out = triangle_wave(1000.0f * t);
+        Left_Out = triangle_wave(1000.0f * t + 0.25f);
         break;
     }
     case 2:
@@ -117,7 +113,12 @@ void Process_Data()
     case 3:
     {
         Right_Out = Left_In;
-        Left_Out = delay_line_filter(Left_In);
+        if (Max < Left_In) // adjust maximum at runtime
+        {
+            Max = Left_In;
+        }
+
+        Left_Out = delay_line_filter(Left_In) / Max;
 
         break;
     }

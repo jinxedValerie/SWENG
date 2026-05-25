@@ -11,6 +11,7 @@
    1. [Dreiecksfunktion](#dreiecksfunktion)
    2. [DelayLine Filter](#delayline-filter)
 5. [Berechnungen zum Digitalfilter](#berechnungen-zum-digitalfilter)
+6. [Programmcode](#programmcode)
 
 ## Vorbemerkung
 
@@ -114,3 +115,24 @@ Der aktuelle Abtastwert `y` wird dann am selben Index für zukünftige Filterdur
 Die Funktion gibt zur Normierung auf einen Wertebereich von -1 bis 1 `out / 2` zurück.
 
 ## Berechnungen zum Digitalfilter
+
+Wenn die durch den Grad des Filters erzeugte Phasenverschiebung zwischen dem aktuellen und dem vorherigen Abtastwerts ein ganzzahliges Vielfaches einer Periodendauer (`n * T`) erreicht, wird der Ausgabewert des Filters maximal (Durchlassbereich).  
+Umgekehrt wird der Ausgabewert minimal, wenn die Phasenverschiebung `n * T + T/2` erreicht (Sperrbereich)
+
+Bei der festgelegten Abtastrate von `50 kHz` und Grad `i = 20` ergeben sich damit folgende Werte für Sperr- und Durchlassbereich:
+
+`delta t = T * i = (1/f) * i = (1/50 kHz) * 20 = 20 us * 20 = 0,4 ms`
+`T = 1/f`
+
+- **Durchlassbereich**:  
+  `delta t = n * T`  
+  `f = n / delta t`  
+  `f_1 = 2500 Hz` (mit n = 1, auch alle ganzzahligen Vielfache davon)
+- **Sperrbereich**:
+  `delta t = (n + 1/2) * T`  
+  `f = (n + 1/2) / delta t`  
+  `f_0 = 1250 Hz`, `f_1 = 3750 Hz`, ...
+
+In der Praktikumsdurchführung konnten diese Werte experimentell bestätigt werden.
+
+## Programmcode

@@ -10,10 +10,10 @@ _Durchgeführt am 19.05.2026_
 1. [Vorbemerkung](#vorbemerkung)
 2. [Hauptschleife](#hauptschleife)
 3. [Betriebsmodi](#betriebsmodi)
-   1. [Sinus-Signale](#teilaufgabe-1-sinus-signale)
-   2. [Dreieck-Signale](#teilaufgabe-2-dreieck-signale)
-   3. [Schwellwertschalter](#teilaufgabe-3-schwellwertschalter)
-   4. [Digitaler Filter](#teilaufgabe-4-digitaler-filter)
+   1. [Sinus-Signale](#sinus-signale)
+   2. [Dreieck-Signale](#dreieck-signale)
+   3. [Schwellwertschalter](#schwellwertschalter)
+   4. [Digitaler Filter](#digitaler-filter)
 4. [Hilfsfunktionen](#hilfsfunktionen)
    1. [Dreiecksfunktion](#dreiecksfunktion)
    2. [DelayLine Filter](#delayline-filter)
@@ -39,7 +39,7 @@ für die Verwendung in den Funktionen gesetzt.
 
 `switch (State)` schaltet zwischen den Betriebsmodi um.
 
-### Teilaufgabe 1: Sinus-Signale
+### Sinus-Signale
 
 Erzeugt zwei unabhängige, kontinuierliche Sinusschwingungen, die direkt an die Ausgangskanäle gesendet werden.
 
@@ -49,7 +49,7 @@ Erzeugt zwei unabhängige, kontinuierliche Sinusschwingungen, die direkt an die 
 Zur Berechnung der Sinusschwingungen wird `float sinf`
 und die allgemeine Schwingungsformel `sin(ωt)`, `ω = 2πf` verwendet.
 
-### Teilaufgabe 2: Dreieck-Signale
+### Dreieck-Signale
 
 Nutzt die Hilfsfunktion `triangle_wave`, um zwei identische Wellenformen mit einer festen Phasenverschiebung zu erzeugen.
 
@@ -58,7 +58,7 @@ Nutzt die Hilfsfunktion `triangle_wave`, um zwei identische Wellenformen mit ein
    Da die Hilfsfunktion 1t-Periodisch ist, ergibt sich also zu addierender Wert von `0.25f`.  
    `triangle_wave(1000.0f * t + 0.25f)`
 
-### Teilaufgabe 3: Schwellwertschalter
+### Schwellwertschalter
 
 Erzeugt ein Sinussignal, dessen Frequenz abhängig von der Amplitude des Eingangssignals ist.
 Damit beim Umschalten zwischen den Frequenzen kein Sprung im Ausgangssignal entsteht,
@@ -81,7 +81,7 @@ wird ein kontinuierlicher Phasenakkumulator statt des absoluten `t`verwendet.
 - **Ausgabesignal (`Left_Out`):**  
   Der Ausgabewert kann nun direkt mit der aktuellen Phase und der Sinusfunktion berechnet werden.
 
-### Teilaufgabe 4: Digitaler Filter
+### Digitaler Filter
 
 Wendet den Verzögerungsfilter auf das Eingangssignal an und normalisiert die Ausgabe dynamisch.
 

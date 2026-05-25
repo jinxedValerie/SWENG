@@ -1,4 +1,11 @@
-# Inhaltsverzeichnis
+# Programmdokumentation zum Versuch Grundlagen der digitalen Signalverarbeitung (INT3)
+
+_von Anna Degen, Marvin Horn, Diana Masyluk, Jakob Röhrborn_  
+_Durchgeführt am 19.05.2026_
+
+---
+
+## Inhaltsverzeichnis
 
 1. [Vorbemerkung](#vorbemerkung)
 2. [Hauptschleife](#hauptschleife)

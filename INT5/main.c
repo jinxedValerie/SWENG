@@ -6,6 +6,10 @@ const unsigned int SAMPLE_FREQ = 16000;
 const int HIST_CLASS_1 = SAMPLE_FREQ / 1000;
 const int HIST_CLASS_2 = SAMPLE_FREQ / 100;
 const int HIST_CLASS_3 = SAMPLE_FREQ / 10;
+const float HIST_CLASS_1_INC = 1.0f;
+const float HIST_CLASS_2_INC = 1.0f;
+const float HIST_CLASS_3_INC = 1.0f;
+const float HIST_CLASS_4_INC = 1.0f;
 
 typedef enum
 {
@@ -93,18 +97,21 @@ void differentiate_array(short array[], size_t length, short *diff_buf)
 // hist buf needs to be zero-initialized or will add otherwise
 void crossing_histogram(size_t *crossing_idxs, size_t crossings, float *hist_buf)
 {
+    if (crossings < 2)
+        return;
+
     for (size_t i = 0; i < crossings - 1; i++)
     {
         int distance = crossing_idxs[i + 1] - crossing_idxs[i];
 
         if (distance < HIST_CLASS_1)
-            hist_buf[0] += 1;
+            hist_buf[0] += HIST_CLASS_1_INC;
         else if (distance < HIST_CLASS_2)
-            hist_buf[1] += 1;
+            hist_buf[1] += HIST_CLASS_2_INC;
         else if (distance < HIST_CLASS_3)
-            hist_buf[2] += 1;
+            hist_buf[2] += HIST_CLASS_3_INC;
         else
-            hist_buf[3] += 1;
+            hist_buf[3] += HIST_CLASS_4_INC;
     }
 }
 
@@ -113,11 +120,12 @@ const float ENERGY_RELATIVE_THRESHOLD = 0.25f;                   // UNSURE WHAT 
 const unsigned int ENERGY_DURATION_THRESHOLD = SAMPLE_FREQ / 10; // UNSURE WHAT TO USE
 Status signal_detekt(short **sample_anfang, unsigned int *sample_anzahl)
 {
+    if (sample_anfang == NULL || sample_anzahl == NULL)
+        return ERROR;
+
     // SETUP
     short *full_samples = *sample_anfang;
     size_t full_sample_length = *sample_anzahl;
-    if (full_sample_length < ENERGY_BLUR || full_sample_length < ENERGY_DURATION_THRESHOLD)
-        return NOOP;
 
     short *signal_samples = full_samples;
     size_t signal_length = 0;
@@ -127,13 +135,15 @@ Status signal_detekt(short **sample_anfang, unsigned int *sample_anzahl)
         return NOOP;
 
     // CALCULATE ENERGY
-    int *energy = calloc(full_sample_length, sizeof(int));
-    if (energy == nullptr)
+    int *energy = malloc(full_sample_length * sizeof(int));
+    if (energy == NULL)
         return ERROR;
 
-    for (size_t i = ENERGY_BLUR; i < full_sample_length; i++)
+    for (size_t i = 0; i < full_sample_length; i++)
     {
-        energy[i] = mean_square(&full_samples[i - ENERGY_BLUR], ENERGY_BLUR);
+        size_t start_idx = (i < ENERGY_BLUR) ? 0 : (i - ENERGY_BLUR);
+        size_t window_len = (i < ENERGY_BLUR) ? (i + 1) : ENERGY_BLUR;
+        energy[i] = mean_square(&full_samples[start_idx], window_len);
     }
 
     int max = array_max(energy, full_sample_length);
@@ -182,9 +192,12 @@ Status signal_detekt(short **sample_anfang, unsigned int *sample_anzahl)
 const int NOISE_THRESHOLD = 50; // UNSURE WHAT TO USE
 Status ndg_dichte(short *feld_ptr, unsigned int anzahl_atw, float *dichte_ori, float *dichte_diff)
 {
+    if (feld_ptr == NULL || dichte_ori == NULL || dichte_diff == NULL)
+        return ERROR;
+
     // SETUP
     size_t *crossings_buf = malloc(anzahl_atw * sizeof(size_t));
-    if (crossings_buf == nullptr)
+    if (crossings_buf == NULL)
         return ERROR;
     size_t crossings;
 
@@ -197,7 +210,7 @@ Status ndg_dichte(short *feld_ptr, unsigned int anzahl_atw, float *dichte_ori, f
 
     size_t diff_buf_len = anzahl_atw - 1;
     short *diff_buf = malloc(diff_buf_len * sizeof(short));
-    if (diff_buf == nullptr)
+    if (diff_buf == NULL)
     {
         free(crossings_buf);
         return ERROR;
@@ -216,9 +229,12 @@ Status ndg_dichte(short *feld_ptr, unsigned int anzahl_atw, float *dichte_ori, f
 
 Status ndg_histogramm(short *feld_ptr, unsigned int anzahl_atw, float *hist_ori, float *hist_diff)
 {
+    if (feld_ptr == NULL || hist_ori == NULL || hist_diff == NULL)
+        return ERROR;
+
     // SETUP
     size_t *crossings_buf = malloc(anzahl_atw * sizeof(size_t));
-    if (crossings_buf == nullptr)
+    if (crossings_buf == NULL)
         return ERROR;
     size_t crossings;
 
@@ -236,7 +252,7 @@ Status ndg_histogramm(short *feld_ptr, unsigned int anzahl_atw, float *hist_ori,
     // CALC DIFF
     size_t diff_buf_len = anzahl_atw - 1;
     short *diff_buf = malloc(diff_buf_len * sizeof(short));
-    if (crossings_buf == nullptr)
+    if (diff_buf == NULL)
     {
         free(crossings_buf);
         return ERROR;
@@ -246,6 +262,9 @@ Status ndg_histogramm(short *feld_ptr, unsigned int anzahl_atw, float *hist_ori,
     zero_crossings(diff_buf, diff_buf_len, NOISE_THRESHOLD, crossings_buf, &crossings);
     crossing_histogram(crossings_buf, crossings, hist_diff);
 
+    // CLEANUP
+    free(crossings_buf);
+    free(diff_buf);
     return OK;
 }
 
